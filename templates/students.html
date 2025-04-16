@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef1f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form.search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 60%;
+            max-width: 400px;
+        }
+        button {
+            padding: 8px 12px;
+            margin-left: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #007BFF;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .action-btn {
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            background-color: #c0392b;
+        }
+        .edit-btn {
+            background-color: #f1c40f;
+            color: white;
+            padding: 6px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        .link-btn {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Registered Students</h2>
+
+    <form method="GET" action="/students" class="search-bar">
+        <input type="text" name="search" placeholder="Search by name or course" value="{{ search | default('') }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if students %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Course</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.course }}</td>
+            <td>
+                <form action="/delete/{{ student.id }}" method="POST" style="display:inline;">
+                    <button class="action-btn" type="submit">Delete</button>
+                </form>
+                <a href="/edit/{{ student.id }}" class="edit-btn">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align: center;">No students found.</p>
+    {% endif %}
+
+    <a class="link-btn" href="/export">⬇ Download CSV</a>
+    <a class="link-btn" href="/dashboard">📊 View Dashboard</a>
+    <a class="link-btn" href="/">← Back to Registration</a>
+</div>
+</body>
+</html>
